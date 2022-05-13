@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <widget class="QGroupBox" name="groupBox_Chart">
       <property name="title">
@@ -24,35 +24,18 @@
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
+       <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QGroupBox" name="groupBox_Input">
           <property name="title">
            <string>Input</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0,0,0">
+          <layout class="QGridLayout" name="gridLayout_2" rowstretch="0">
            <property name="sizeConstraint">
             <enum>QLayout::SetDefaultConstraint</enum>
            </property>
-           <item row="2" column="2">
-            <widget class="QSpinBox" name="spinBox_MaxCO2"/>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_maxCO2">
-             <property name="text">
-              <string>max CO2</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_CO2Hist">
-             <property name="text">
-              <string>CO2 hist</string>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="1">
             <widget class="QSlider" name="horizontalSlider_desiredValue">
              <property name="orientation">
@@ -60,71 +43,13 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
-            <widget class="QSlider" name="horizontalSlider_MaxH20">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="2">
-            <widget class="QSpinBox" name="spinBox_MinH20"/>
+           <item row="0" column="2">
+            <widget class="QSpinBox" name="spinBox_desiredValue"/>
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_desiredValue">
              <property name="text">
               <string>desired Value</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0" colspan="3">
-            <widget class="Line" name="line">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QSpinBox" name="spinBox_CO2Hist"/>
-           </item>
-           <item row="4" column="2">
-            <widget class="QSpinBox" name="spinBox_MaxH20"/>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_maxH20">
-             <property name="text">
-              <string>max H2O</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="label_minH20">
-             <property name="text">
-              <string>min H2O</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QSpinBox" name="spinBox_desiredValue"/>
-           </item>
-           <item row="2" column="1">
-            <widget class="QSlider" name="horizontalSlider_MaxCO2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="1">
-            <widget class="QSlider" name="horizontalSlider_MinH20">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QSlider" name="horizontalSlider_CO2Hist">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
              </property>
             </widget>
            </item>
@@ -136,46 +61,46 @@
           <property name="title">
            <string>PID</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout">
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="spinBox_Kp"/>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_Td">
-             <property name="text">
-              <string>Td</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="spinBox_Ki"/>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_Ki">
-             <property name="text">
-              <string>Ki</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="spinBox_Td"/>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_Kp">
-             <property name="text">
-              <string>Kp</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
             <widget class="QLabel" name="label_Ts">
              <property name="text">
               <string>Ts</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
+           <item>
             <widget class="QSpinBox" name="spinBox_Ts"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_Td">
+             <property name="text">
+              <string>Td</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="spinBox_Td"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_Ki">
+             <property name="text">
+              <string>Ki</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="spinBox_Ki"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_Kp">
+             <property name="text">
+              <string>Kp</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="spinBox_Kp"/>
            </item>
           </layout>
          </widget>
