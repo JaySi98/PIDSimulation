@@ -1,19 +1,53 @@
 #include "pid.h"
 
-PID::PID(QObject *parent)
-    : QObject{parent}
+PID::PID(QGraphicsItem *parent, Qt::WindowFlags wFlags):
+    QChart(QChart::ChartTypeCartesian, parent, wFlags)
 {
     reset();
+
+    axisX = new QValueAxis();
+    axisY = new QValueAxis();
+
+    //TODO
+    series = new QSplineSeries(this);
+    QPen green(Qt::red);
+    green.setWidth(3);
+    series->setPen(green);
+    series->append(x, y);
+
+    // TODO
+    addSeries(series);
+    addAxis(axisX,Qt::AlignBottom);
+    addAxis(axisY,Qt::AlignLeft);
+    series->attachAxis(axisX);
+    series->attachAxis(axisY);
+    axisX->setTickCount(5);
+    axisX->setRange(0, 10);
+    axisY->setRange(-5, 10);
 
     timer.setInterval(DELAY);
     connect(&timer, &QTimer::timeout, this, &PID::timeout);
 }
 
+PID::~PID()
+{
+
+}
+
 void PID::timeout()
 {
+    //TODO
+    qreal tx = 2;//plotArea().width() / axisX->tickCount();
+    qreal ty = (axisX->max() - axisX->min()) / axisX->tickCount();
+    x += ty;
+    y = QRandomGenerator::global()->bounded(5) - 2.5;
+    series->append(x, y);
+    scroll(tx, 0);
+
     calculateOffset();
     calculatePID();
     emit sendControlAndOffset(control, offset);
+
 }
 
 void PID::calculateOffset()
@@ -45,8 +79,13 @@ void PID::stop()
 
 void PID::reset()
 {
-    desiredValue = 50;
+    series = 0;
+    step = 0;
+    x = 5;
+    y = 1;
 
+
+    desiredValue = 50;
     Ts = 20;
     Kp = 2;
     Ki = 24;
@@ -56,3 +95,5 @@ void PID::reset()
     control = 0;
     memset(prevOffset, 0, sizeof(prevOffset));
 }
+
+

@@ -40,7 +40,6 @@ private:
 
     Ui::MainWindow *ui;
     QChartView *chartView;
-    QChart *chart;
     PID* pid;
 };
 #endif // MAINWINDOW_H

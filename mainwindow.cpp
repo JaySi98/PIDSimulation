@@ -7,19 +7,15 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    pid = new PID();
-    connect(pid, &PID::sendControlAndOffset, this, &MainWindow::displayValues, Qt::QueuedConnection);
-
-    resetSimulation();
     InitGUI();
     InitChart();
+    resetSimulation();
 }
 
 MainWindow::~MainWindow()
 {
     delete pid;
     delete chartView;
-    delete chart;
     delete ui;
 }
 
@@ -43,30 +39,13 @@ void MainWindow::InitGUI()
 
 void MainWindow::InitChart()
 {
-    chart = new QChart();
-    chart->setTitle("Line chart");
+    pid = new PID();
+    pid->legend()->hide();
+    pid->setAnimationOptions(QChart::AllAnimations);
+    connect(pid, &PID::sendControlAndOffset, this, &MainWindow::displayValues, Qt::QueuedConnection);
 
-//    QString name("Series ");
-//    int nameIndex = 0;
-//    for (const DataList &list : m_dataTable) {
-//        QLineSeries *series = new QLineSeries(chart);
-//        for (const Data &data : list)
-//            series->append(data.first);
-//        series->setName(name + QString::number(nameIndex));
-//        nameIndex++;
-//        chart->addSeries(series);
-//    }
-
-//    chart->createDefaultAxes();
-//    chart->axes(Qt::Horizontal).first()->setRange(0, m_valueMax);
-//    chart->axes(Qt::Vertical).first()->setRange(0, m_valueCount);
-
-    // Add space to label to add space between labels and axis
-//    QValueAxis *axisY = qobject_cast<QValueAxis*>(chart->axes(Qt::Vertical).first());
-//    Q_ASSERT(axisY);
-//    axisY->setLabelFormat("%.1f  ");
-
-    chartView = new QChartView(chart);
+    chartView = new QChartView(pid);
+    chartView->setRenderHint(QPainter::Antialiasing);
     ui->groupBox_Chart->layout()->addWidget(chartView);
 }
 

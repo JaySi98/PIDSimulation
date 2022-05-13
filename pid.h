@@ -2,20 +2,24 @@
 #define PID_H
 
 #include <QObject>
+#include <QtCharts/QChart>
 #include <QTimer>
+#include <QSplineSeries>
+#include <QValueAxis>
+#include <QRandomGenerator>
 
 #define OFFSET_COUNT 2
 #define DELAY 1000
 
-class PID : public QObject
+class PID : public QChart
 {
     Q_OBJECT
 public:
-    explicit PID(QObject *parent = nullptr);
+    explicit PID(QGraphicsItem *parent = nullptr, Qt::WindowFlags wFlags = {});
+    virtual ~PID();
     void start();
     void stop();
     void reset();
-
 
     int   Ts;
     float Kp;
@@ -36,6 +40,13 @@ private:
     void calculatePID(void);
 
     QTimer timer;
+
+    QSplineSeries *series;
+    QValueAxis *axisX;
+    QValueAxis *axisY;
+    double step;
+    double x;
+    double y;
 
 };
 
