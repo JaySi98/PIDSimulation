@@ -8,10 +8,15 @@
 #include <QValueAxis>
 #include <QRandomGenerator>
 
-#define OFFSET_COUNT 2
 #define DELAY 1000
 #define MAX_VALUE 100
 #define MIN_VALUE 0
+
+#define INIT_SETPOINT 50
+#define INIT_TS        1
+#define INIT_KP       0.2
+#define INIT_KI       0.5
+#define INIT_TD       0.01
 
 typedef enum
 {
@@ -37,8 +42,9 @@ public:
 
     int   setpoint;
     float offset;
-    float prevOffset[OFFSET_COUNT];
+    float prevOffset;
     float control;
+    float integral;
 
 public slots:
     void setKp(float value);

@@ -51,18 +51,19 @@ void PID::initDataLines()
 
 void PID::initValues()
 {
-    x = 5;
+    x = 3;
 
     // PID
-    setpoint = 50;
-    Ts = 20;
-    Kp = 2;
-    Ki = 24;
-    Td = 1;
+    setpoint = (int)INIT_SETPOINT;
+    Ts = (int)INIT_TS;
+    Kp = (float)INIT_KP;
+    Ki = (float)INIT_KI;
+    Td = (float)INIT_TD;
 
-    offset = 0;
-    control = 0;
-    memset(prevOffset, 0, sizeof(prevOffset));
+    offset     = 0;
+    prevOffset = 0;
+    control    = 0;
+    integral   = 0;
 }
 
 void PID::timeout()
@@ -79,30 +80,39 @@ void PID::timeout()
     series[DATA_TYPE_SETPOINT]->append(x, setpoint);
     scroll(tx, 0);
 
-    emit sendControlAndOffset(x, offset);
+    emit sendControlAndOffset(control, offset);
 
 }
 
 void PID::calculateOffset()
 {
-    offset = control + setpoint;
+    offset = setpoint - control;
 }
 
 void PID::calculatePID()
 {
-    const float r0 = Kp * (1.0f + (float)Ts / (2.0f * Ki) + Td / (float)Ts);
-    const float r1 = Kp * ((float)Ts / (2.0f * Ki) - 2.0f * Td / (float)Ts - 1.0f);
-    const float r2 = Kp * Td / (float)Ts;
+    float Pout = Kp * offset;
 
-    control = (control + r0 * offset + r1 * prevOffset[1] + r2 * prevOffset[0]);
+    integral += offset * Ts;
+    float Iout  = Ki * 1; //integral
+
+    float deriative = (offset - prevOffset) / Ts;
+    float Dout = Td * deriative; //
+
+    control = Pout + Iout + Dout;
+
+    // old algorythm
+//    const float r0 = Kp * (1.0f + (float)Ts / (2.0f * Ki) + Td / (float)Ts);
+//    const float r1 = Kp * ((float)Ts / (2.0f * Ki) - 2.0f * Td / (float)Ts - 1.0f);
+//    const float r2 = Kp * Td / (float)Ts;
+//    control = (control + r0 * offset + r1 * prevOffset[1] + r2 * prevOffset[0]);
 
     if(control > MAX_VALUE)
         control = MAX_VALUE;
     else if(control < MIN_VALUE)
         control = MIN_VALUE;
 
-    prevOffset[0] = prevOffset[1];
-    prevOffset[1] = offset;
+    prevOffset = offset;
 }
 
 void PID::start()
