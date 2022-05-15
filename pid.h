@@ -11,6 +11,13 @@
 #define OFFSET_COUNT 2
 #define DELAY 1000
 
+typedef enum
+{
+    DATA_TYPE_CONTROL = 0,
+    DATA_TYPE_SETPOINT,
+    DATA_TYPE_COUNT,
+}dataType;
+
 class PID : public QChart
 {
     Q_OBJECT
@@ -26,24 +33,33 @@ public:
     float Ki;
     float Td;
 
-    int   desiredValue;
+    int   setpoint;
     float offset;
     float prevOffset[OFFSET_COUNT];
     float control;
+
+public slots:
+    void setKp(float value);
+    void setKi(float value);
+    void setTd(float value);
+    void setTs(int value);
+    void setSetpoint(int value);
 
 signals:
     void sendControlAndOffset(float control, float offset);
 
 private:
+    void initDataLines(void);
     void timeout(void);
     void calculateOffset(void);
     void calculatePID(void);
 
-    QTimer timer;
+    QList<QSplineSeries*> series;
 
-    QSplineSeries *series;
+    QTimer timer;
     QValueAxis *axisX;
     QValueAxis *axisY;
+
     double step;
     double x;
     double y;

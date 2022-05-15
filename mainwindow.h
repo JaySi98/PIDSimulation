@@ -23,15 +23,9 @@ public:
     ~MainWindow();
 
 private slots:
-    void setKp(float value);
-    void setKi(float value);
-    void setTd(float value);
-    void setTs(int value);
-    void setDesiredValue(int value);
     void startSimulation(void);
     void stopSimulation(void);
     void resetSimulation(void);
-    //
     void displayValues(float control, float offset);
 
 private:
