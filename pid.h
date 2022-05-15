@@ -10,6 +10,8 @@
 
 #define OFFSET_COUNT 2
 #define DELAY 1000
+#define MAX_VALUE 100
+#define MIN_VALUE 0
 
 typedef enum
 {
@@ -50,19 +52,16 @@ signals:
 
 private:
     void initDataLines(void);
+    void initValues();
     void timeout(void);
     void calculateOffset(void);
     void calculatePID(void);
 
     QList<QSplineSeries*> series;
-
     QTimer timer;
     QValueAxis *axisX;
     QValueAxis *axisY;
-
-    double step;
     double x;
-    double y;
 
 };
 

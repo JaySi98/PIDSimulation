@@ -50,7 +50,7 @@ void MainWindow::InitGUI()
 void MainWindow::InitChart()
 {
     pid = new PID();
-    pid->legend()->hide();
+//    pid->legend()->hide();
     pid->setAnimationOptions(QChart::AllAnimations);
     connect(pid, &PID::sendControlAndOffset, this, &MainWindow::displayValues, Qt::QueuedConnection);
 

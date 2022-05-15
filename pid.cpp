@@ -12,7 +12,7 @@ PID::PID(QGraphicsItem *parent, Qt::WindowFlags wFlags):
     axisY->setRange(0, 100);
 
     initDataLines();
-    reset();
+    initValues();
 
     timer.setInterval(DELAY);
     connect(&timer, &QTimer::timeout, this, &PID::timeout);
@@ -26,11 +26,15 @@ PID::~PID()
 void PID::initDataLines()
 {
     QSplineSeries* controlSeries = new QSplineSeries(this);
+    controlSeries->append(0,control);
+    controlSeries->setName("Control");
     QPen blue(Qt::blue);
     blue.setWidth(3);
     controlSeries ->setPen(blue);
 
     QSplineSeries* setpointSeries = new QSplineSeries(this);
+    setpointSeries->append(0,setpoint);
+    setpointSeries->setName("Setpoint");
     QPen green(Qt::green);
     green.setWidth(3);
     setpointSeries->setPen(green);
@@ -39,28 +43,43 @@ void PID::initDataLines()
 
     for(int i = 0; i < DATA_TYPE_COUNT; i++)
     {
-        series[i] = new QSplineSeries(this);
-        series[i]->append(x,y);
         addSeries(series[i]);
         series[i]->attachAxis(axisX);
         series[i]->attachAxis(axisY);
     }
 }
 
+void PID::initValues()
+{
+    x = 5;
+
+    // PID
+    setpoint = 50;
+    Ts = 20;
+    Kp = 2;
+    Ki = 24;
+    Td = 1;
+
+    offset = 0;
+    control = 0;
+    memset(prevOffset, 0, sizeof(prevOffset));
+}
+
 void PID::timeout()
 {
+    calculateOffset();
+    calculatePID();
+
     //TODO
     qreal tx = plotArea().width() / axisX->tickCount();
     qreal ty = (axisX->max() - axisX->min()) / axisX->tickCount();
     x += ty;
-    y = QRandomGenerator::global()->bounded(100);
-    series[DATA_TYPE_CONTROL]->append(x, y);
+
+    series[DATA_TYPE_CONTROL]->append(x, control);
     series[DATA_TYPE_SETPOINT]->append(x, setpoint);
     scroll(tx, 0);
 
-    calculateOffset();
-    calculatePID();
-    emit sendControlAndOffset(control, offset);
+    emit sendControlAndOffset(x, offset);
 
 }
 
@@ -76,6 +95,11 @@ void PID::calculatePID()
     const float r2 = Kp * Td / (float)Ts;
 
     control = (control + r0 * offset + r1 * prevOffset[1] + r2 * prevOffset[0]);
+
+    if(control > MAX_VALUE)
+        control = MAX_VALUE;
+    else if(control < MIN_VALUE)
+        control = MIN_VALUE;
 
     prevOffset[0] = prevOffset[1];
     prevOffset[1] = offset;
@@ -93,27 +117,15 @@ void PID::stop()
 
 void PID::reset()
 {
-    //TODO
-    scroll(0, 0);
+    // I dont know why it doesnt work
+    scroll(-axisX->max(),0);
+
     for(int i = 0; i < DATA_TYPE_COUNT; i++)
     {
         series[i]->clear();
     }
 
-    step = 0;
-    x = 5;
-    y = 0;
-
-    // PID
-    setpoint = 50;
-    Ts = 20;
-    Kp = 2;
-    Ki = 24;
-    Td = 1;
-
-    offset = 0;
-    control = 0;
-    memset(prevOffset, 0, sizeof(prevOffset));
+    initValues();
 }
 
 //
